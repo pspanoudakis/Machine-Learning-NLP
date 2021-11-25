@@ -5,5 +5,6 @@
     ![](cm7.png)
 
 - `min_df`, `max_df`
+
     ![](scores8.png)
     ![](cm8.png)

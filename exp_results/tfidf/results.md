@@ -1,6 +1,7 @@
 ## TFIDF Vectorizer
 
 - `min_df`, `max_df`, `ngram_range`
+
     ![](scores1.png)
     ![](cm1.png)
 
