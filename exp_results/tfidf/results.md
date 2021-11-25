@@ -5,6 +5,11 @@
     ![](scores1.png)
     ![](cm1.png)
 
+- `min_df`, `max_df`, `ngram_range` & `penalty="none"`
+
+    ![](scores9.png)
+    ![](cm9.png)
+
 - `min_df`, `max_df`, preprocessing, stop words
 
     ![](scores2.png)
