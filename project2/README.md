@@ -3,5 +3,5 @@
 
 Folder contents:
 - `questions1-2.pdf`: Detailed solution for Questions 1 & 2
-- `TweetClassifier.ipynb`: Solution for Question 3 (with a specific model version)
+- `TweetClassifierNN.ipynb`: Solution for Question 3 (with a specific model version)
 - `report.pdf`: Report on Question 3, along with several model performance results.
