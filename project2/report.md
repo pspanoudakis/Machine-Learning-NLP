@@ -28,6 +28,17 @@
     Hyperparameters such as number of epochs, batch size, learning rate, number & size of layers etc. can be modified on cell #2.
 
 7) Training the model:
+    We use `numpy` arrays to store several performance stats during training, such as Loss and F1 score on Train and Validation set after each epoch.\
+    During each epoch:
+    - For each batch given by the `DataLoader`:
+        - We make predictions on this batch
+        - Extract the predicted labels & calculate the accuracy
+        - Calculate & store the batch Loss
+        - Perform backpropagation
+    - After going through all the batches, we calculate the total Loss and the F1 score for the Train set
+    - We make predictions on the Validation set
+    - Calculate & store the Validation set Loss
+    - We extract the predicted labels, calculate the accuracy and store the F1 score
 
 8) Displaying performance results:
     After the end of training we display:
@@ -42,8 +53,6 @@
     `roc_curve` applies generated possibility thresholds to create the curves, therefore if we provided it with just the predicted labels, it would only apply 3 thresholds to each result, which is insufficient to create useful ROC curves.
 
 ### Different models performace comparison
-For all the results below, `solver = "lbfgs"` was used in the Classifier.
-
 - Using **`TfidfVectorizer`**:
     - Using `min_df`, `max_df` & `ngram_range` in the Vectorizer:
 
@@ -53,13 +62,8 @@ For all the results below, `solver = "lbfgs"` was used in the Classifier.
 
 ### Takeaways
 - We see much better performance on `Neutral` and `Pro-Vaccine` tweets in all models, since a significant amount of train set tweets are labeled as such.\
-Apparently, the majority of the `Anti-Vaccine` tweets are falsely predicted as `Pro-Vaccine`, which can be explained: Tweets from both labels are expected to have many common features ("vaccine", "virus" etc.). The number of `Pro-Vaccine` tweets in the train set is significantly greater, which confuses the model to increase these feature weights on the `Pro-Vaccine` class.
+Apparently, the majority of the `Anti-Vaccine` tweets are falsely predicted as `Pro-Vaccine`, which can be explained: Tweets from both labels are expected to have many common words ("vaccine", "virus" etc.). The number of `Pro-Vaccine` tweets in the train set is significantly greater, which confuses the model to associate them with the `Pro-Vaccine` class.
 We can improve the model performance on `Anti-Vaccine` tweets, by "feeding" it with more of them.
-- When we do not specify `min_df` & `max_df` parameters, the model is overfitting, since the number of features is way too large and prevents our model predictions from generalizing.
-In these cases, we can see that all the metric scores are better, which means that, hypothetically, if we feed the model with more samples, it will achieve better scores (when the two curves eventually approach each other). Of course, the difference between the two curves is huge, therefore the required amount of extra samples may be extreme.
-- We see that preprocessing, as well as using stop words list does not help the model. In fact it causes a slight performance reduction, and also increases the "sense" of possible overfitting, since the curves become almost parallel at the end.
-- Simply using `CountVectorizer` causes slight scores reduction, so `TfidfVectorizer` (which is essentially `CountVectorizer` & `TfidfTransformer`) seems to be the right choice.
-- The final model that is selected in the notebook uses `TfidfVectorizer`, with custom `min_df`, `max_df` & `ngram_range` parameters and a Classifier with just `max_iter = 1000` and `mutliclass = "multinomial"`parameters.
 
 ### Development
 The notebook has been developed in WSL Ubuntu 20.04, using Visual Studio Code & Python 3.8.10.\
