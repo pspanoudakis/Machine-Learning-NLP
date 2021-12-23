@@ -53,17 +53,57 @@
     `roc_curve` applies generated possibility thresholds to create the curves, therefore if we provided it with just the predicted labels, it would only apply 3 thresholds to each result, which is insufficient to create useful ROC curves.
 
 ### Different models performace comparison
-- Using **`TfidfVectorizer`**:
-    - Using `min_df`, `max_df` & `ngram_range` in the Vectorizer:
+1)  - Optimizer = `SGD`
+    - LEARNING_RATE = 0.0045
+    - BATCH_SIZE = 64
+    - EPOCHS = 175
+    - LAYER_SIZES = [128, 32, 8]
+    - USE_RELU = True
+    - USE_DROPOUT = False
+    - EMBEDDINGS_PATH = '/mnt/c/Users/pavlo/Downloads/glove.6B.200d.txt'
 
-    ![](./exp_results/tfidf/cm1.png)
+    ![](./exp_results/cm1.png)
 
-    ![](./exp_results/tfidf/scores1.png)
+    ![](./exp_results/scores1.png)
+
+    ![](./exp_results/curves1.png)
+
+2)  - Optimizer = `Adam`
+    - LEARNING_RATE = 0.0001
+    - BATCH_SIZE = 128
+    - EPOCHS = 30
+    - LAYER_SIZES = [256, 64, 16]
+    - USE_RELU = True
+    - USE_DROPOUT = False
+    - EMBEDDINGS_PATH = '/mnt/c/Users/pavlo/Downloads/glove.6B.300d.txt'
+
+    ![](./exp_results/cm2.png)
+
+    ![](./exp_results/scores2.png)
+
+    ![](./exp_results/curves2.png)
+
+3)  - Optimizer = `SGD`
+    - LEARNING_RATE = 0.004
+    - BATCH_SIZE = 32
+    - EPOCHS = 100
+    - LAYER_SIZES = [64, 32, 16, 8]
+    - USE_RELU = False
+    - USE_DROPOUT = False
+    - EMBEDDINGS_PATH = '/mnt/c/Users/pavlo/Downloads/glove.6B.50d.txt'
+
+    ![](./exp_results/cm3.png)
+
+    ![](./exp_results/scores3.png)
+
+    ![](./exp_results/curves3.png)
 
 ### Takeaways
 - We see much better performance on `Neutral` and `Pro-Vaccine` tweets in all models, since a significant amount of train set tweets are labeled as such.\
-Apparently, the majority of the `Anti-Vaccine` tweets are falsely predicted as `Pro-Vaccine`, which can be explained: Tweets from both labels are expected to have many common words ("vaccine", "virus" etc.). The number of `Pro-Vaccine` tweets in the train set is significantly greater, which confuses the model to associate them with the `Pro-Vaccine` class.
-We can improve the model performance on `Anti-Vaccine` tweets, by "feeding" it with more of them.
+A great percentage of the `Anti-Vaccine` tweets are inevitably predicted as `Pro-Vaccine`: Tweets from both labels are expected to have many common words ("vaccine", "virus" etc.). The number of `Pro-Vaccine` tweets in the train set is significantly greater, which confuses the model to associate them with the `Pro-Vaccine` class.
+We can improve the model performance on `Anti-Vaccine` tweets, by "feeding" it with more such data.
+
+### Comparison with HW1 Softmax Regression Model
 
 ### Development
 The notebook has been developed in WSL Ubuntu 20.04, using Visual Studio Code & Python 3.8.10.\
