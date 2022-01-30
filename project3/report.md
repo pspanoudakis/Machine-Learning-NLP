@@ -4,32 +4,22 @@
 ***
 
 ### Basic Execution flow
-![](./models/skip_conn_proto.png)
+
 1) Before creating the train & validation sets, we read the `.csv` files the usual way (with `pd.read_csv`), to check if all the samples have the expected format without missing values, and get the number of samples in the validation set (which will be needed later).
 
-2)
+2) We create the Train and Validation sets, using `TabularDataset` objects:
+- We preprocess each tweet with `customPreprocessor` and tokenize it using `nltk.TweetVectorizer`.
+- We will access the two sets in batches, using `BucketIterator` objects. We initialize the validation set `BucketIterator` with `batch_size` equal to the validation set size, so essentially we access the set in "batch mode" (one batch for the whole set).
 
-4) Reading pre-trained word embeddings file, and storing the vector for each given word.
+3) We create the embeddings matrix, where we store the **GloVe** vector for each word in the train set vocabulary.
 
-5) Vectorizing the train set & validation set samples using the pre-trained vectors:
-    - We start by tokenizing each tweet using `nltk.TweetVectorizer`.
-    - For each word/token returned by the tokenizer, we find the corresponding stored vector.
-    - We sum up all the vectors and divide the result by the number of tokens in the tweet.\
-    This "mean vector" will be assigned to the tweet.\
-    If the vector for a word is not found, it does not contribute to the sum, but it does influence the final result, so unknown words essentially "contribute" with a vector of zeros.
+4) We initialize the Model. Hyperparameters such as number of epochs, batch size, learning rate, number & size of layers, Dropout probability etc. can be modified on cell #2. \
+    We use `CrossEntropyLoss` and the `Adam` optimizer.
 
-6) Creating the Neural Network, selecting Loss function and Optimizer:
-    - We create a `Network` instance, with the desired number and size of layers.
-    - We create a `TensorDataset` in order create a `DataLoader` which will be used to obtain train set batches during each epoch.
-    - We create X and Y Tensors for both sets, which will be used in multiple cases.
-    - We select the Loss Function & the Optimizer.
-
-    Hyperparameters such as number of epochs, batch size, learning rate, number & size of layers etc. can be modified on cell #2.
-
-7) Training the model:
+5) We train the model:
     We use `numpy` arrays to store several performance stats during training, such as Loss and F1 score on Train and Validation set after each epoch.\
     During each epoch:
-    - For each batch given by the `DataLoader`:
+    - For each batch given by the train set `BucketIterator`:
         - We make predictions on this batch
         - Extract the predicted labels & calculate the accuracy
         - Calculate & store the batch Loss
@@ -39,7 +29,7 @@
     - Calculate & store the Validation set Loss
     - We extract the predicted labels, calculate the accuracy and store the F1 score
 
-8) Displaying performance results:
+6) Displaying performance results:
     After the end of training we display:
     - The Confusion Matrices of the final model predictions on the Train and Validation sets.
     - The F1 Learning Curves for both sets, to demonstrate the performance of the model after each epoch of the training phase.
@@ -51,12 +41,32 @@
     To create the curves, we apply the `softmax` function to the NN output vector, to convert it to possibility values that add-up to 1, and use the `softmax` output to create the curves.\
     `roc_curve` applies generated possibility thresholds to create the curves, therefore if we provided it with just the predicted labels, it would only apply 3 thresholds to each result, which is insufficient to create useful ROC curves.
 
+***
+### Model types used during development
+-   Models 1, 2 have the following architecture:
+    ![](./models/attention.png) 
+    (Model 2 does not use attention layer, but other than that the structure is the same.\
+    Model 1 is the chosen model, and can be used with or without attention layer. See the next section for the performance comaprison.)
+
+    - We use bidirectional, stacked RNN, without skip connections.
+    - If desired (optionally in Model 1), we can pass the RNN output through an Attention Layer, to help the model focus in critical parts of each tweet and prevent the vanishing gradient in faraway hidden states.
+    - Finally, we add a Linear layer to output a vector of the desired size.
+- Models 3, 4 have the following architecture:
+    ![](./models/skip_conn.png)
+    - We use a stacked RNN, this time with skip connections. We apply a skip connection in every 2 layers (layers 1, 3, 5 etc. have a skip connection, and the output of layers 2, 4, 6 etc. is the destination of a skip connection). Skip connections are implemented simply using `torch.add`
+    - Before providing input to any layer (except for the first one) we apply a Dropout layer to it.
+    - We apply a `ReLU` layer to the odd layer outputs, except for the first one.
+    - Finally, we add a Linear layer to output a vector of the desired size.
+
+***
 ### Different models performace comparison
 **Notes** on all models:
-- `random.seed`, `np.random.seed` and `torch.manual_seed` were called using `SEED = 32` before all model tests,
-to enable reproducability of the results displayed below.
-- `CrossEntropyLoss` was used for loss calcuation in all models, since the results with other loss functions were not satisfying.
-- `GloVe` pre-trained word embeddings were used in all models, but with different vector dimensions each time.
+- The performance results displayed below have been produced without using GPU acceleration.
+- When not using GPU, the results can be reproduced using `SEED = 42`.
+- Unfortunately, GPU-accelerated model results could not be fully reproduced.
+- The execution of each model using only CPU takes about 5 minutes. In case this is inconvenient, GPU can be enabled, in code cell #6,
+but note that the results for all models will differ from the ones presented bellow.
+- All models use the `GloVe` pre-trained word embeddings from `glove.6B.100d.txt`.
 1) This is the preselected model in the interactive notebook. For this model, we use:
     - Embeddings File: `glove.6B.200d.txt`
     - Optimizer: `SGD`
