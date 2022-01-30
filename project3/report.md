@@ -112,31 +112,18 @@ In case this is inconvenient, GPU can be enabled in code cell #6, but note that
 
     ![](./exp_results/model4/total.png)
 
-### Comments/Observations on each model
-- The first model is also the preselected model in the notebook.\
-We notice that it "learns" slowly and firmly, since Stochastic Gradient Descent is used.
-It is worth mentioning that the addition of ReLU layers made a significant improvement in the model performance. The learning rate and the number of epochs have been tuned, so that the model loss on the validation set is not increased at any point of the training phase, while maintaining similar performance of both sets, avoiding any overfitting.
-- The second model is drastically different.\
-`Adam` optimizer leads to satisfying performance really quick, with slightly more instability on the Validation set performance, as displayed in the F1 curve.\
-The fact that this model is an "early learner" is displayed in the Loss curve as well:\
-The loss drops really fast in the early epochs, and then starts dropping significantly more slowly.
--   The third model is a modified version of the first one (and was actually one of the first ones working properly).\
-    The differences from the first model are:
-    - The word vector dimensions are 50 instead of 200, so the network has fewer information to work with. This leads to worse performance potential, as well as less overfitting.
-    - No ReLU activation layers are used and that seemed to not help the model during the tests.
-    - The Batch size, the number of epochs, as well as the number and size of layers has been tuned in order to avoid overfitting (the performance on the Validation set was essentially not affected).
+### Comments/Observations on the models and their develpoment
+- We notice that bidirectional models tend to perform better. They learn more quickly (in terms of epochs) and perform better in each seperate class, which affects the **Precision** and especially the **Recall** score.
+- Skip connections did not seem to have any significant effect in the model performance.
+- GRU models achieved slightly better performance, possibly due to their simplicity, which prevents overfitting in comparison to LSTM's.
+- Decreasing the Dropout probability and/or the batch size usually resulted in higher tendency for overfitting.
+- Using **GloVe** embeddings with vector size = 100 appeared to be just about right. Higher vector size  would cause significant overfitting in most cases.
+- Just like in the previous 2 homeworks, we see much better performance on `Neutral` and `Pro-Vaccine` tweets in all models, since the vast amount of train set tweets are labeled as such.
+- However, the ROC curves show that while the model may have trouble classifying `Anti-Vaccine` tweets correctly, the possibility assigned to this class when the prediction is wrong is not small. In other words, the model may be **misclassifying** the `Anti-Vaccine` tweets, but **it is not very "confident"** in these cases.
 
-    The model performance is visibly worse in all metrics and the loss for both sets is stabilized after a point, which does not indicate satisfying potential.
+### Adding Attention Layer to Model 1
 
-### Takeaways
-- We see much better performance on `Neutral` and `Pro-Vaccine` tweets in all models, since a significant amount of train set tweets are labeled as such.\
-A great percentage of the `Anti-Vaccine` tweets are inevitably predicted as `Pro-Vaccine`: Tweets from both labels are expected to have many common words ("vaccine", "virus" etc.). The number of `Pro-Vaccine` tweets in the train set is significantly greater, which confuses the model to associate them with the `Pro-Vaccine` class.
-We can improve the model performance on `Anti-Vaccine` tweets, by "feeding" it with more such data.
-- Stochastic Gradient Descent leads to slower, but firm learing, while `Adam` encourages fast but more unstable learning.
-- The increase in the word vector dimensions can help in learning generalization up to a certain point.
-- The ROC curves show that while the model may have trouble classifying `Anti-Vaccine` tweets correctly, the possibility assigned to this class when the prediction is wrong is not small. In other words, the model may be **misclassifying** the `Anti-Vaccine` tweets, but **it is not very "confident"** in these cases.
-
-### Comparison with HW1 Softmax Regression Model
+### Comparison with HW1 Softmax Regression Model and HW2 Feed-Forward NN Model
 Below are the performance results of the model obtained using SoftMax Regression in HW1:
 
 ![](../project1/exp_results/tfidf/cm1.png)
@@ -148,5 +135,5 @@ Simply taking the mean vector of all words in a tweet does not take important fa
 Despite that fact, we can see that the NN classifier seems less biased by the the class imbalance in the Train set, since it labels less `Neutral` tweets correctly, and more `Pro-Vaccine` tweets correctly. The performance on the `Anti-Vaccine` tweets might be disappointing, since the imbalance is huge, but as mentioned above, the ROC Curve shows that the model is not that confident when mislabeling `Anti-Vaccine` tweets.
 
 ### Development
-The notebook has been developed in WSL Ubuntu 20.04, using Visual Studio Code & Python 3.8.10.\
-It has been tested successfully in Google Colab environment as well.
+The notebook has been developed mostly in Google Colab, but also in WSL Ubuntu 20.04, using Visual Studio Code & Python 3.8.10.\
+It has been tested successfully in the Google Colab environment, using both CPU-only and GPU-accelerated runtime engines.
