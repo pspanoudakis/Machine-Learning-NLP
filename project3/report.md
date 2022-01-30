@@ -13,7 +13,7 @@
 
 3) We create the embeddings matrix, where we store the **GloVe** vector for each word in the train set vocabulary.
 
-4) We initialize the Model. Hyperparameters such as number of epochs, batch size, learning rate, number & size of layers, Dropout probability etc. can be modified on cell #2. \
+4) We initialize the Model. Hyperparameters such as number of epochs, batch size, learning rate, number & size of layers, Dropout probability etc. can be modified on code cell #5. \
     We use `CrossEntropyLoss` and the `Adam` optimizer.
 
 5) We train the model:
@@ -53,7 +53,7 @@
     - Finally, we add a Linear layer to output a vector of the desired size.
 - Models 3, 4 use the following architecture:
     ![](./models/skip_conn.png)
-    - We use a stacked RNN, this time with skip connections. We apply a skip connection in every 2 layers (layers 1, 3, 5 etc. have a skip connection, and the output of layers 2, 4, 6 etc. is the destination of a skip connection). Skip connections are implemented simply using `torch.add`
+    - We use a stacked RNN, this time with skip connections. We apply a skip connection in every 2 layers (layers 1, 3, 5 etc. have a skip connection, and the output of layers 2, 4, 6 etc. is the destination of a skip connection). Skip connections are implemented simply using `torch.add`.
     - Before providing input to any layer (except for the first one) we apply a Dropout layer to it.
     - We apply a `ReLU` layer to the odd layer outputs, except for the first one.
     - Finally, we add a Linear layer to output a vector of the desired size.
@@ -66,7 +66,7 @@
 - Unfortunately, GPU-accelerated model results could not be fully reproduced.
 - The execution of each model using only CPU takes about 4-5 minutes. 
 In case this is inconvenient, GPU can be enabled in code cell #6, but note that
- the results for all models will differ from the ones presented bellow.
+ the results for all models will differ from the ones presented below.
 - All models use the **GloVe** pre-trained word embeddings from `glove.6B.100d.txt`.
 1) This is the preselected model in the interactive notebook. For this model, we use:
     - Learning rate: 0.005
@@ -101,7 +101,7 @@ In case this is inconvenient, GPU can be enabled in code cell #6, but note that
 
     ![](./exp_results/model3/cm.png)
 
-    ![](./exp_results/model3/curves.png)
+    ![](./exp_results/model3/loss.png)
 
 4) In the last model, we use:
     - Learning rate: 0.0055
@@ -110,8 +110,11 @@ In case this is inconvenient, GPU can be enabled in code cell #6, but note that
     - RNN: 3-layer **LSTM**, with `hidden_size = 64` and skip connections
     - Dropout probability: 0.5
 
-    ![](./exp_results/model4/total.png)
+    ![](./exp_results/model4/cm.png)
+    
+    ![](./exp_results/model4/roc.png)
 
+***
 ### Comments/Observations on the models and their develpoment
 - We notice that bidirectional models tend to perform better. They learn more quickly (in terms of epochs) and perform better in each seperate class, which affects the **Precision** and especially the **Recall** score.
 - Skip connections did not seem to have any significant effect in the model performance.
@@ -121,19 +124,39 @@ In case this is inconvenient, GPU can be enabled in code cell #6, but note that
 - Just like in the previous 2 homeworks, we see much better performance on `Neutral` and `Pro-Vaccine` tweets in all models, since the vast amount of train set tweets are labeled as such.
 - However, the ROC curves show that while the model may have trouble classifying `Anti-Vaccine` tweets correctly, the possibility assigned to this class when the prediction is wrong is not small. In other words, the model may be **misclassifying** the `Anti-Vaccine` tweets, but **it is not very "confident"** in these cases.
 
+***
 ### Adding Attention Layer to Model 1
 
-### Comparison with HW1 Softmax Regression Model and HW2 Feed-Forward NN Model
-Below are the performance results of the model obtained using SoftMax Regression in HW1:
+Adding the implemented Attention layer did not have any significant impact to the Model.\
+Below are the performance results of Model 1, after adding Attention:
 
+![](./exp_results/model1/attention/cm.png)
+
+![](./exp_results/model1/attention/f1.png)
+
+![](./exp_results/model1/attention/roc.png)
+
+***
+### Comparison to HW1 Softmax Regression Model and HW2 Feed-Forward NN Model
+HW1 SoftMax Regression performance results:
 ![](../project1/exp_results/tfidf/cm1.png)
-
 ![](../project1/exp_results/tfidf/scores1.png)
+![](../project2/exp_results/error.png)
 
-We can see that the results are not drastically different, probably due to the "naive" use of word vectors in HW2:
-Simply taking the mean vector of all words in a tweet does not take important factors into account, such as the position of the words, or meaningful word combinations.\
-Despite that fact, we can see that the NN classifier seems less biased by the the class imbalance in the Train set, since it labels less `Neutral` tweets correctly, and more `Pro-Vaccine` tweets correctly. The performance on the `Anti-Vaccine` tweets might be disappointing, since the imbalance is huge, but as mentioned above, the ROC Curve shows that the model is not that confident when mislabeling `Anti-Vaccine` tweets.
 
+HW2 Feed-Forward NN performance results:
+![](../project2/exp_results/total.png)
+
+While the macro accuracy and the F1 score have not improved a lot, we notice many performance improvements in comparison to the previous Models:
+- The RNN Model performs much better in `Anti-Vaccine` tweets. This has an impact on multiple metrics:
+    - The confusion matrix,
+    - The Precision and especially the Recall score,
+    - The ROC curves. The ROC Area for the `Anti-Vaccine` has risen to 0.85 (0.06 increase from 0.79 in the Feed-Forward Model)
+- The loss value has been decreased below 0.70 (it was above 0.75 in the Feed-Forward NN).
+- The RNN Model performs better in all seperate classes, as seen in the ROC Area scores.
+- We can conclude that a bidirectional (or even a single-directional) RNN is a much more effective way to handle the word vectors (in comparison to the "naive" mean sentence vector used in HW2 Model), since it takes the word positions into account.
+
+***
 ### Development
 The notebook has been developed mostly in Google Colab, but also in WSL Ubuntu 20.04, using Visual Studio Code & Python 3.8.10.\
 It has been tested successfully in the Google Colab environment, using both CPU-only and GPU-accelerated runtime engines.
