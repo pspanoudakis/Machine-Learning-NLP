@@ -46,12 +46,12 @@
 -   Models 1, 2 have the following architecture:
     ![](./models/attention.png) 
     (Model 2 does not use attention layer, but other than that the structure is the same.\
-    Model 1 is the chosen model, and can be used with or without attention layer. See the next section for the performance comaprison.)
+    Model 1 is the chosen model, and can be used with or without attention layer. See the next sections for the performance comaprison.)
 
     - We use bidirectional, stacked RNN, without skip connections.
     - If desired (optionally in Model 1), we can pass the RNN output through an Attention Layer, to help the model focus in critical parts of each tweet and prevent the vanishing gradient in faraway hidden states.
     - Finally, we add a Linear layer to output a vector of the desired size.
-- Models 3, 4 have the following architecture:
+- Models 3, 4 use the following architecture:
     ![](./models/skip_conn.png)
     - We use a stacked RNN, this time with skip connections. We apply a skip connection in every 2 layers (layers 1, 3, 5 etc. have a skip connection, and the output of layers 2, 4, 6 etc. is the destination of a skip connection). Skip connections are implemented simply using `torch.add`
     - Before providing input to any layer (except for the first one) we apply a Dropout layer to it.
@@ -59,7 +59,7 @@
     - Finally, we add a Linear layer to output a vector of the desired size.
 
 ***
-### Different models performace comparison
+### Different models performance comparison
 **Notes** on all models:
 - The performance results displayed below have been produced without using GPU acceleration.
 - When not using GPU, the results can be reproduced using `SEED = 42`.
@@ -69,63 +69,48 @@ In case this is inconvenient, GPU can be enabled in code cell #6, but note that
  the results for all models will differ from the ones presented bellow.
 - All models use the **GloVe** pre-trained word embeddings from `glove.6B.100d.txt`.
 1) This is the preselected model in the interactive notebook. For this model, we use:
-    - Embeddings File: `glove.6B.200d.txt`
-    - Optimizer: `SGD`
-    - Learning rate: 0.0045
-    - Batch Size: 64
-    - \# Epochs: 175
-    - Network Layers:
-        - Input Layer (in -> `n_features`, out -> 128)
-        - Hidden Layer 1 (in -> 128, out -> 32)
-        - ReLU
-        - Hidden Layer 2 (in -> 32, out -> 8)
-        - ReLU
-        - Output Layer (in -> 8, out -> `n_classes`)
+    - Learning rate: 0.005
+    - Batch Size: 256
+    - \# Epochs: 5
+    - RNN: Bidirectional, 4-layer **GRU**, with `hidden_size = 32`
+    - Dropout probability: 0.5
 
-    ![](./exp_results/cm1.png)
+    ![](./exp_results/model1/cm.png)
 
-    ![](./exp_results/scores1.png)
+    ![](./exp_results/model1/scores.png)
 
-    ![](./exp_results/curves1.png)
+    ![](./exp_results/model1/curves.png)
 
-2) For the next model, we use:
-    - Embeddings File: `glove.6B.300d.txt`
-    - Optimizer: `Adam`
-    - Learning rate: 0.0001
+2) For this model, we use:
+    - Learning rate: 0.005
     - Batch Size: 128
-    - \# Epochs: 30
-    - Network Layers:
-        - Input Layer (in -> `n_features`, out -> 256)
-        - Hidden Layer 1 (in -> 256, out -> 64)
-        - ReLU
-        - Hidden Layer 2 (in -> 64, out -> 16)
-        - ReLU
-        - Output Layer (in -> 16, out -> `n_classes`)
+    - \# Epochs: 4
+    - RNN: Bidirectional, 4-layer **LSTM**, with `hidden_size = 32`
+    - Dropout probability: 0.5
 
-    ![](./exp_results/cm2.png)
+    ![](./exp_results/model2/cm.png)
 
-    ![](./exp_results/scores2.png)
+    ![](./exp_results/model2/curves.png)
 
-    ![](./exp_results/curves2.png)
+3) In this model, we use:
+    - Learning rate: 0.005
+    - Batch Size: 128
+    - \# Epochs: 5
+    - RNN: 6-layer **GRU**, with `hidden_size = 64` and skip connections
+    - Dropout probability: 0.5
 
-3) For the thrid and final model, we use:
-    - Embeddings File: `glove.6B.50d.txt`
-    - Optimizer: `SGD`
-    - Learning rate: 0.004
-    - Batch Size: 32
-    - \# Epochs: 100
-    - Network Layers:
-        - Input Layer (in -> `n_features`, out -> 64)
-        - Hidden Layer 1 (in -> 64, out -> 32)
-        - Hidden Layer 2 (in -> 32, out -> 16)
-        - Hidden Layer 3 (in -> 16, out -> 8)
-        - Output Layer (in -> 8, out -> `n_classes`)
+    ![](./exp_results/model3/cm.png)
 
-    ![](./exp_results/cm3.png)
+    ![](./exp_results/model3/curves.png)
 
-    ![](./exp_results/scores3.png)
+4) In the last model, we use:
+    - Learning rate: 0.0055
+    - Batch Size: 256
+    - \# Epochs: 12
+    - RNN: 3-layer **LSTM**, with `hidden_size = 64` and skip connections
+    - Dropout probability: 0.5
 
-    ![](./exp_results/curves3.png)
+    ![](./exp_results/model4/total.png)
 
 ### Comments/Observations on each model
 - The first model is also the preselected model in the notebook.\
