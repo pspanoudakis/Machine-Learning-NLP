@@ -64,9 +64,10 @@
 - The performance results displayed below have been produced without using GPU acceleration.
 - When not using GPU, the results can be reproduced using `SEED = 42`.
 - Unfortunately, GPU-accelerated model results could not be fully reproduced.
-- The execution of each model using only CPU takes about 5 minutes. In case this is inconvenient, GPU can be enabled, in code cell #6,
-but note that the results for all models will differ from the ones presented bellow.
-- All models use the `GloVe` pre-trained word embeddings from `glove.6B.100d.txt`.
+- The execution of each model using only CPU takes about 4-5 minutes. 
+In case this is inconvenient, GPU can be enabled in code cell #6, but note that
+ the results for all models will differ from the ones presented bellow.
+- All models use the **GloVe** pre-trained word embeddings from `glove.6B.100d.txt`.
 1) This is the preselected model in the interactive notebook. For this model, we use:
     - Embeddings File: `glove.6B.200d.txt`
     - Optimizer: `SGD`
