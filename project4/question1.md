@@ -5,7 +5,7 @@
 
 ### Basic Execution flow
 
-1)  We read the train & validation sets data from the input files, into `DataFrame`'s. The file paths can be modified on the first notebook cell.
+1)  We read the train & validation sets data from the input files, into `DataFrame`'s. The file paths can be modified on the notebook code cell #2.
     We also check whether all the samples have the expected format without missing values.
 
 2)  We create the Train and Validation sets, using `TweetDataset` objects. We tokenize each sample using `BertTokenizer`, for the pretrained `bert-base-uncased` model.
@@ -38,7 +38,7 @@
     `roc_curve` applies generated possibility thresholds to create the curves, therefore if we provided it with just the predicted labels, it would only apply 3 thresholds to each result, which is insufficient to create useful ROC curves.
 
 ***
-### Model architecture
+### Model Architecture
 
 ***
 ### Different models performance comparison
@@ -75,5 +75,6 @@ In case this is inconvenient, GPU can be enabled in code cell #6, but note that
 
 ***
 ### Development
-The notebook has been developed in Google Colab and was based on the Projects 2 & 3 notebooks.\
-It has been tested successfully in Google Colab & Kaggle environments, using GPU-accelerated runtimes.
+-   The notebook has been developed mostly in Google Colab and was based on the Projects 2 & 3 notebooks.
+-   It has been tested successfully in Google Colab & Kaggle environments, using GPU-accelerated runtimes.
+    - **Note**: In Kaggle, Confusion Matrices code crashes because `ConfusionMatrixDisplay.from_predictions` appears to be unavailable.
