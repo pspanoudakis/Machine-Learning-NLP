@@ -89,11 +89,11 @@ The model has a simple architecture. It is implemented in the `BertTweetClassifi
 ***
 ### Comments/Observations on the models and their develpoment
 - Model hyperparameters are mostly based on/influenced by the BERT authors recommendations:
-    - Batch Sizes: 8, 16, 32, 64, 128:
+    - Batch Sizes: 8, 16, 32, 64, 128 \
     Training with Batch Size = 8 caused overfitting in most cases. Training with Batch Size = 128 caused `CUDA: out of memory` errors in Google Colab.
-    - Learning Rates: 3e-4, 1e-4, 5e-5, 3e-5:
+    - Learning Rates: 3e-4, 1e-4, 5e-5, 3e-5 \
     The Learning Rates of the presented models are a result of fine-tuning, tweaking and experimenting with the recommended ones.
-    - Number of Epochs: 4
+    - Number of Epochs: 4 \
     In our case, the experiments showed that 2-3 epochs are more suitable.
 - MAX_LENGTH = 100 appeared to be enough for decent results, without increasing the execution time dramatically.
 - In comparison with the previous projects models, we notice that BERT model can achieve decent performance even with huge class imbalance regarding "Anti-Vaccine" tweets.
