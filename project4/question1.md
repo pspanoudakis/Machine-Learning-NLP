@@ -56,7 +56,7 @@ The model has a simple architecture. It is implemented in the `BertTweetClassifi
     - Batch Size: 64
     - \# Epochs: 2
     - Dropout probability: 0.2
-    - Execution Time: < 20 minutes
+    - Execution Time: ~20 minutes
 
     ![](./exp_results/cm1.png)
 
@@ -68,7 +68,7 @@ The model has a simple architecture. It is implemented in the `BertTweetClassifi
     - Batch Size: 32
     - \# Epochs: 3
     - Dropout probability: 0.25
-    - Execution Time: < 15 minutes
+    - Execution Time: ~15 minutes
     ![](./exp_results/cm2.png)
 
     ![](./exp_results/scores2.png)
@@ -79,7 +79,7 @@ The model has a simple architecture. It is implemented in the `BertTweetClassifi
     - Batch Size: 16
     - \# Epochs: 2
     - Dropout probability: 0.1
-    - Execution Time: < 20 minutes
+    - Execution Time: ~20 minutes
     ![](./exp_results/cm3.png)
 
     ![](./exp_results/scores3.png)
