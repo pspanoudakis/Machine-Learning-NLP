@@ -68,23 +68,23 @@ The model has a simple architecture. It is implemented in the `BertTweetClassifi
     - Batch Size: 32
     - \# Epochs: 3
     - Dropout probability: 0.25
+    - Execution Time: < 15 minutes
+    ![](./exp_results/cm2.png)
 
-    ![](./exp_results/cm1.png)
+    ![](./exp_results/scores2.png)
 
-    ![](./exp_results/scores1.png)
-
-    ![](./exp_results/roc1.png)
+    ![](./exp_results/roc2.png)
 3) In this model, we use:
     - Learning rate: 1e-5
     - Batch Size: 16
     - \# Epochs: 2
     - Dropout probability: 0.1
+    - Execution Time: < 20 minutes
+    ![](./exp_results/cm3.png)
 
-    ![](./exp_results/cm1.png)
+    ![](./exp_results/scores3.png)
 
-    ![](./exp_results/scores1.png)
-
-    ![](./exp_results/roc1.png)
+    ![](./exp_results/roc3.png)
 
 ***
 ### Comments/Observations on the models and their develpoment
