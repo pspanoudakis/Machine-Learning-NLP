@@ -39,11 +39,19 @@
 
 ***
 ### Model Parameters & Performance
-
+- When initially tokenizing the Contexts, to find the Question answers, we tokenize them using `MAX_LENGTH=350`. During the training, we tokenize each Question + Context pair using `MAX_LENGTH=400`, but also using `truncation_strategy=ONLY_SECOND`, to avoid losing Questions information.
+- Learning Rate is set to 5e-5.
+- We train for 3 Epochs.
+- We use Batch Size 16.
+- The execution takes ~ 110 minutes per epoch (5h 30min in total), if both sets are used 100%. There is also the option of limiting the number of samples to read from each set, by providing a `limit` parameter to `readDataset`.
+- Below are the stats displayed during training: \
+    ![](./exp_results/squad.png)
 ***
-### Comments on the Model develpoment
-
+### Comments on the Model & its development
+- This Question 2 solution is certainly far from complete.
+- Training with Batch Size > 16 was not possible (`CUDA: out of memory` errors) without reducing the `MAX_LENGTH` furthermore, which would lead to truncating an important amount of contexts and questions.
+- The notebook is influenced by Chris McCormick's notebook presented in courses.
 
 ***
 ### Development
--   The notebook has been developed in Kaggle, due to the restrictions regarding GPU usage, as well as the worse GPU performance in Google Colab.
+The notebook has been developed in Kaggle, due to the restrictions regarding GPU usage, as well as the worse GPU performance in Google Colab.
