@@ -18,7 +18,7 @@
 5)  We train the model:
     We use `list`s to store several performance stats during training, such as Loss and Accuracy on Train and Validation sets after each epoch.\
     During each epoch:
-    - For each batch given by the train set `BucketIterator`:
+    - For each batch given by the train set `DataLoader`:
         - We make predictions on this batch
         - Extract the predicted labels & calculate the accuracy
         - Calculate & store the batch Loss
