@@ -50,7 +50,6 @@ The model has a simple architecture. It is implemented in the `BertTweetClassifi
 - The performance results displayed below have been produced using `SEED = 256` for random generators.
 - Unfortunately, GPU-accelerated model results could not be fully reproduced with certainty.
 - We use `MAX_LENGTH = 100` in all models.
-- The execution of each model takes about 4-5 minutes.
 1) This is the preselected model in the interactive notebook. For this model, we use:
     - Learning rate: 3e-5
     - Batch Size: 64
