@@ -48,7 +48,6 @@ The report on Questions 1 & 2, along with several model performance results, is 
     To create the curves, we apply the `softmax` function to the NN output vector, to convert it to possibility values that add-up to 1, and use the `softmax` output to create the curves.\
     `roc_curve` applies generated possibility thresholds to create the curves, therefore if we provided it with just the predicted labels, it would only apply 3 thresholds to each result, which is insufficient to create useful ROC curves.
 
-***
 ### Model types used during development
 -   Models 1, 2 have the following architecture:
     ![](./docs/models/attention.png) 
@@ -65,7 +64,6 @@ The report on Questions 1 & 2, along with several model performance results, is 
     - We apply a `ReLU` layer to the odd layer outputs, except for the first one.
     - Finally, we add a Linear layer to output a vector of the desired size.
 
-***
 ### Different models performance comparison
 **Notes** on all models:
 - The performance results displayed below have been produced without using GPU acceleration.
@@ -121,7 +119,6 @@ In case this is inconvenient, GPU can be enabled in code cell #6, but note that
     
     ![](./docs/exp_results/model4/roc.png)
 
-***
 ### Comments/Observations on the models and their develpoment
 - We notice that bidirectional models tend to perform better. They learn more quickly (in terms of epochs) and perform better in each seperate class, which affects the **Precision** and especially the **Recall** score.
 - Skip connections did not seem to have any significant effect in the model performance.
@@ -131,7 +128,6 @@ In case this is inconvenient, GPU can be enabled in code cell #6, but note that
 - Just like in the previous 2 homeworks, we see much better performance on `Neutral` and `Pro-Vaccine` tweets in all models, since the vast amount of train set tweets are labeled as such.
 - However, the ROC curves show that while the model may have trouble classifying `Anti-Vaccine` tweets correctly, the possibility assigned to this class when the prediction is wrong is not small. In other words, the model may be **misclassifying** the `Anti-Vaccine` tweets, but **it is not very "confident"** in these cases.
 
-***
 ### Adding Attention Layer to Model 1
 
 Adding the implemented Attention layer did not have any significant impact to the Model.\
@@ -143,7 +139,6 @@ Below are the performance results of Model 1, after adding Attention:
 
 ![](./docs/exp_results/model1/attention/roc.png)
 
-***
 ### Comparison to HW1 Softmax Regression Model and HW2 Feed-Forward NN Model
 HW1 SoftMax Regression performance results:
 ![](../project1/docs/exp_results/tfidf/cm1.png)
@@ -163,7 +158,6 @@ While the macro accuracy and the F1 score have not improved a lot, we notice man
 - The RNN Model performs better in all seperate classes, as seen in the ROC Area scores.
 - We can conclude that a bidirectional (or even a single-directional) RNN is a much more effective way to handle the word vectors (in comparison to the "naive" mean sentence vector used in HW2 Model), since it takes the word positions into account.
 
-***
 ### Development
 The notebook has been developed mostly in Google Colab, but also in WSL Ubuntu 20.04, using Visual Studio Code & Python 3.8.10.\
 It has been tested successfully in the Google Colab environment, using both CPU-only and GPU-accelerated runtime engines.
