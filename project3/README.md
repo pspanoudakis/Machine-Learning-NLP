@@ -1,7 +1,14 @@
 ## Artificial Intelligence II Homework 3
-## Comments & Model Performance results on Questions 1 & 2
 ### Pavlos Spanoudakis (sdi1800184)
+
+Contents:
+- `task.pdf`: Detailed tasks for this project
+- `TweetClassifierRNN.ipynb`: Solution for Questions 1 & 2 (with a specific model version)
+
+The report on Questions 1 & 2, along with several model performance results, is presented below.
+
 ***
+## Comments & Model Performance results on Questions 1 & 2
 
 ### Basic Execution flow
 
@@ -44,7 +51,7 @@
 ***
 ### Model types used during development
 -   Models 1, 2 have the following architecture:
-    ![](./models/attention.png) 
+    ![](./docs/models/attention.png) 
     (Model 2 does not use attention layer, but other than that the structure is the same.\
     Model 1 is the chosen model, and can be used with or without attention layer. See the next sections for the performance comaprison.)
 
@@ -52,7 +59,7 @@
     - If desired (optionally in Model 1), we can pass the RNN output through an Attention Layer, to help the model focus in critical parts of each tweet and prevent the vanishing gradient in faraway hidden states.
     - Finally, we add a Linear layer to output a vector of the desired size.
 - Models 3, 4 use the following architecture:
-    ![](./models/skip_conn.png)
+    ![](./docs/models/skip_conn.png)
     - We use a stacked RNN, this time with skip connections. We apply a skip connection in every 2 layers (layers 1, 3, 5 etc. have a skip connection, and the output of layers 2, 4, 6 etc. is the destination of a skip connection). Skip connections are implemented simply using `torch.add`.
     - Before providing input to any layer (except for the first one) we apply a Dropout layer to it.
     - We apply a `ReLU` layer to the odd layer outputs, except for the first one.
@@ -75,11 +82,11 @@ In case this is inconvenient, GPU can be enabled in code cell #6, but note that
     - RNN: Bidirectional, 4-layer **GRU**, with `hidden_size = 32`
     - Dropout probability: 0.5
 
-    ![](./exp_results/model1/cm.png)
+    ![](./docs/exp_results/model1/cm.png)
 
-    ![](./exp_results/model1/scores.png)
+    ![](./docs/exp_results/model1/scores.png)
 
-    ![](./exp_results/model1/curves.png)
+    ![](./docs/exp_results/model1/curves.png)
 
 2) For this model, we use:
     - Learning rate: 0.005
@@ -88,9 +95,9 @@ In case this is inconvenient, GPU can be enabled in code cell #6, but note that
     - RNN: Bidirectional, 4-layer **LSTM**, with `hidden_size = 32`
     - Dropout probability: 0.5
 
-    ![](./exp_results/model2/cm.png)
+    ![](./docs/exp_results/model2/cm.png)
 
-    ![](./exp_results/model2/curves.png)
+    ![](./docs/exp_results/model2/curves.png)
 
 3) In this model, we use:
     - Learning rate: 0.005
@@ -99,9 +106,9 @@ In case this is inconvenient, GPU can be enabled in code cell #6, but note that
     - RNN: 6-layer **GRU**, with `hidden_size = 64` and skip connections
     - Dropout probability: 0.5
 
-    ![](./exp_results/model3/cm.png)
+    ![](./docs/exp_results/model3/cm.png)
 
-    ![](./exp_results/model3/loss.png)
+    ![](./docs/exp_results/model3/loss.png)
 
 4) In the last model, we use:
     - Learning rate: 0.0055
@@ -110,9 +117,9 @@ In case this is inconvenient, GPU can be enabled in code cell #6, but note that
     - RNN: 3-layer **LSTM**, with `hidden_size = 64` and skip connections
     - Dropout probability: 0.5
 
-    ![](./exp_results/model4/cm.png)
+    ![](./docs/exp_results/model4/cm.png)
     
-    ![](./exp_results/model4/roc.png)
+    ![](./docs/exp_results/model4/roc.png)
 
 ***
 ### Comments/Observations on the models and their develpoment
@@ -130,22 +137,22 @@ In case this is inconvenient, GPU can be enabled in code cell #6, but note that
 Adding the implemented Attention layer did not have any significant impact to the Model.\
 Below are the performance results of Model 1, after adding Attention:
 
-![](./exp_results/model1/attention/cm.png)
+![](./docs/exp_results/model1/attention/cm.png)
 
-![](./exp_results/model1/attention/f1.png)
+![](./docs/exp_results/model1/attention/f1.png)
 
-![](./exp_results/model1/attention/roc.png)
+![](./docs/exp_results/model1/attention/roc.png)
 
 ***
 ### Comparison to HW1 Softmax Regression Model and HW2 Feed-Forward NN Model
 HW1 SoftMax Regression performance results:
-![](../project1/exp_results/tfidf/cm1.png)
-![](../project1/exp_results/tfidf/scores1.png)
-![](../project2/exp_results/error.png)
+![](../project1/docs/exp_results/tfidf/cm1.png)
+![](../project1/docs/exp_results/tfidf/scores1.png)
+![](../project2/docs/exp_results/error.png)
 
 
 HW2 Feed-Forward NN performance results:
-![](../project2/exp_results/total.png)
+![](../project2/docs/exp_results/total.png)
 
 While the macro accuracy and the F1 score have not improved a lot, we notice many performance improvements in comparison to the previous Models:
 - The RNN Model performs much better in `Anti-Vaccine` tweets. This has an impact on multiple metrics:
